@@ -1,0 +1,14 @@
+Spam sms:   
+
+Congratulations! 🎉 You've won a free iPhone 15! Click here to claim your prize: [malicious-link].  
+URGENT! Your bank account has been compromised. Verify your details now: [fake-bank-link].
+You have an unclaimed refund of $500. Act fast! Reply with your card details.  
+
+Not spam sms:
+
+Hey, are we still on for dinner tonight at 7?
+Your Amazon order #123456 has been shipped. Track it here: [legit-tracking-link].  
+Reminder: Your dentist appointment is scheduled for Monday at 2 PM.
+Mom: Can you pick up some groceries on your way home?  
+
+
