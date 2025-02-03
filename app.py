@@ -1,36 +1,26 @@
 import streamlit as st
 import pickle
 import string
-from nltk.stem.porter import PorterStemmer
+from nltk.stem import WordNetLemmatizer
+from nltk import word_tokenize, sent_tokenize, PorterStemmer
 import nltk
+import pandas as pd
 
-ps = PorterStemmer()
+lemmatizer = WordNetLemmatizer()
 nltk.download('punkt_tab')
+nltk.download('wordnet')
 
-def data_preprocessing(text):
-	text = text.lower()
-	text = nltk.word_tokenize(text)
+def data_preprocessing(df):
+    
+    df['clean_text'] = df['Text'].apply(lambda x:x.lower())
+    df['clean_text'] = df['clean_text'].apply(lambda x:x.translate(str.maketrans('', '', string.punctuation)))
+    df['clean_text'] = df['clean_text'].apply(lambda x:word_tokenize(x))
+    df['clean_text'] = df['clean_text'].apply(lambda x:[lemmatizer.lemmatize(i, 'v') for i in x])
+    df['clean_text'] = df['clean_text'].apply(lambda x:" ".join(x))
+    
+    return df[['clean_text']]
 
-	y = []
-	for i in text:
-		if i.isalnum():
-			y.append(i)
 
-	text = y[:]
-	y.clear()
-
-	for i in text:
-		if i not in string.punctuation:
-			y.append(i)
-
-	text = y[:]
-	y.clear()
-
-	for i in text:
-		y.append(ps.stem(i))
-
-	return " ".join(y)
-	
 try:
 
 	model = pickle.load(open('model.pkl', 'rb'))
@@ -46,9 +36,9 @@ try:
 			st.warning('Please enter a sms/email.')
 
 		else:
-			user_clean_input = data_preprocessing(input_sms)
+			input_sms = pd.DataFrame({'Text': [input_sms]})
 
-			prediction = model.predict([user_clean_input])[0]
+			prediction = model.predict(input_sms)[0]
 
 			if prediction == 0:
 			    st.write('#### Entered sms is :- Not Spam')
